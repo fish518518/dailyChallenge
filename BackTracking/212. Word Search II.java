@@ -46,22 +46,26 @@ class Solution {
         int cols = board[0].length;
         return (row >= 0 && row < rows && col >= 0 && col < cols);
     }
-    private void backtracking(char[][] board, int curRow, int curCol, TrieNode node, List<String> res, boolean[][] visited) {//node 代表当前已经找到的当前node，找到的位置在[i, j]
+    private void backtracking(char[][] board, int curRow, int curCol, TrieNode parent, List<String> res, boolean[][] visited) {//node 代表当前已经找到的当前node，找到的位置在[i, j], parent代表这个node的爸爸
+        char curChar = board[curRow][curCol];
+        TrieNode node = parent.children.get(curChar);
         if (node.word != null) {
             res.add(node.word);
-            node.word = null;//这里一定要把word设成null，不然它dfs的时候，走完孩子走回这个节点的时候，还会再添加一次
+            node.word = null;
         }
         //choices: up, down, left, right
         for (int[] direction : DIRECTIONS) {
             int nextRow = curRow + direction[0];
             int nextCol = curCol + direction[1];
-            for (char c : node.children.keySet()) {
-                if (isValid(board, nextRow, nextCol) && !visited[nextRow][nextCol] && board[nextRow][nextCol] == c) {
-                    visited[nextRow][nextCol] = true;
-                    backtracking(board, nextRow, nextCol, node.children.get(c), res, visited);
-                    visited[nextRow][nextCol] = false;
-                }
+            if (isValid(board, nextRow, nextCol) && !visited[nextRow][nextCol] && node.children.containsKey(board[nextRow][nextCol])) {
+                visited[nextRow][nextCol] = true;
+                backtracking(board, nextRow, nextCol, node, res, visited);
+                visited[nextRow][nextCol] = false;
             }
+        }
+        if (node.children.isEmpty()) {
+            //optimize: if curNode is the leaf, delete it after visit it
+            parent.children.remove(curChar);
         }
     }
     private void insert(TrieNode root, String word) {
@@ -84,14 +88,12 @@ class Solution {
         for (String word : words) {
             insert(root, word);
         }
-        for (char c : root.children.keySet()) {
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    if (board[i][j] == c) {
-                        visited[i][j] = true;
-                        backtracking(board, i, j, root.children.get(c), res, visited);
-                        visited[i][j] = false;
-                    }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (root.children.containsKey(board[i][j])){
+                    visited[i][j] = true;
+                    backtracking(board, i, j, root, res, visited);
+                    visited[i][j] = false;
                 }
             }
         }
