@@ -1,7 +1,8 @@
 /**
  * https://leetcode.com/problems/meeting-rooms-ii/
  * Given an array of meeting time intervals intervals where intervals[i] = [starti, endi], return the minimum number of conference rooms required.
-
+时间复杂度：O(Nlog(N))，考虑到要排序
+空间复杂度：O (N)
  
 
 Example 1:
