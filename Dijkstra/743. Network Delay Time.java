@@ -65,7 +65,10 @@ class Solution {
             if (!visited.contains(node)) {
                 if (nodeToNeighbors.containsKey(node)) {
                     for (int[] p : nodeToNeighbors.get(node)) {
-                        minHeap.offer(new int[]{p[0], p[1] + edge});
+                        if (!visited.contains(p[0])) {
+                            minHeap.offer(new int[]{p[0], p[1] + edge});
+                        }
+                        
                     }
                 }
                 maxDelayTime = Math.max(maxDelayTime, edge);
