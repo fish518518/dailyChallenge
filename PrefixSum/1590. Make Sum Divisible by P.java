@@ -51,23 +51,22 @@ class Solution {
     public int minSubarray(int[] nums, int p) {
         int totalSum = 0;
         for (int num : nums) {
-            totalSum = (totalSum + num) % p;
+            totalSum = (totalSum + num) % p;//每一次都模p，以免越界
         }
         if (totalSum % p == 0) return 0;
-        
-        int remainder = (totalSum % p + p) % p;
+        int remainder = (totalSum % p + p) % p;//利用(a%b+b)%b调整余数范围到[0, p)
         int result = nums.length;
-        Map<Integer, Integer> remainingToIdx = new HashMap<>();//idx is not included
-        remainingToIdx.put(0, 0);
+        Map<Integer, Integer> remainderToIdx = new HashMap<>();//idx is not included
+        remainderToIdx.put(0, 0);
         int prefixSum = 0;
         for (int i = 0; i < nums.length; i++) {
             prefixSum = (prefixSum + nums[i]) % p;//到i+1之前的所有和
-            int r = (prefixSum % p + p) % p;
-            int target = ((r - remainder) % p + p) % p;
-            if (remainingToIdx.containsKey(target)) {
-                result = Math.min(result, i - remainingToIdx.get(target) + 1); //[key, i]
+            int r = (prefixSum % p + p) % p;//当前的余数
+            int target = ((r - remainder) % p + p) % p;//要找的余数
+            if (remainderToIdx.containsKey(target)) {
+                result = Math.min(result, i - remainderToIdx.get(target) + 1); //[key, i]
             }
-            remainingToIdx.put(r, i + 1);
+            remainderToIdx.put(r, i + 1);
         }
         return (result == nums.length ? -1 : result);
     }
