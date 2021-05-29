@@ -55,7 +55,7 @@ class Solution {
         }
         if (totalSum % p == 0) return 0;
         
-        int remaining = (totalSum % p + p) % p;
+        int remainder = (totalSum % p + p) % p;
         int result = nums.length;
         Map<Integer, Integer> remainingToIdx = new HashMap<>();//idx is not included
         remainingToIdx.put(0, 0);
@@ -63,7 +63,7 @@ class Solution {
         for (int i = 0; i < nums.length; i++) {
             prefixSum = (prefixSum + nums[i]) % p;//到i+1之前的所有和
             int r = (prefixSum % p + p) % p;
-            int target = ((r - remaining) % p + p) % p;
+            int target = ((r - remainder) % p + p) % p;
             if (remainingToIdx.containsKey(target)) {
                 result = Math.min(result, i - remainingToIdx.get(target) + 1); //[key, i]
             }
