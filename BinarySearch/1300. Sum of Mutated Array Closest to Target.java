@@ -39,7 +39,6 @@ class Solution {
         return max;
     }
     private int getSum(int[] arr, int value) {
-        //如果越界就返回Integer.MAX_VALUE
         long sum = 0;
         for (int a : arr) {
             sum += Math.min(a, value);
@@ -47,17 +46,12 @@ class Solution {
         return sum > Integer.MAX_VALUE ? Integer.MAX_VALUE: (int)sum;
     }
     public int findBestValue(int[] arr, int target) {
-        //1 <= arr[i], target <= 10e5知道所有元素都是正数，target也是正数
-        //要求一个value，所有>value的元素都变成value之后取和越接近target越好
-        //首先考虑如果设value为一个小于0的数，那么sum就是负数，那么当value是0的时候，sum是0，因为target>=1所以sum是0肯定比sum是负数更接近target，所以一开始初始值是value=0，diff=target。并且value必须>=0
-        //当value增加的时候，sum要么增加，要么不变
-        //当value减少的时候，sum要么减少，要么不变
-        //value的取值范围是[0, 10e5]
+        int max = getMax(arr);
         int left = 0;
-        int right = (int)Math.pow(10, 5);
+        int right = max;
         int result = 0;
         int diff = target;
-        int max = getMax(arr);
+        
         while (left <= right) {
             int mid = left + (right - left) / 2;
             int sum = getSum(arr, mid);
@@ -77,12 +71,7 @@ class Solution {
                 right = mid - 1;
             } else {
                 //想要找有没有更大的sum，或者sum虽然相同，但是value更小
-                if (mid < max) {
-                    left = mid + 1;
-                } else {
-                    left = max;
-                    right = mid - 1;
-                }
+                left = mid + 1;
             }
         }
         return result;
