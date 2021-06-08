@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 /**
- * 时间复杂度：O(Nlog(N))，排序
+ * 时间复杂度：O(N)
  * 空间复杂度：O(1)
  * https://leetcode.com/problems/sell-diminishing-valued-colored-balls/
  * You have an inventory of different colored balls, and there is a customer that wants orders balls of any color.
@@ -48,13 +48,12 @@ class Solution {
     private int getTotalProfit(int[] inventory, int orders, int K) {
         //贪心，从最高价开始卖
         //大于K的都卖掉了，等于K的卖掉了一部份
-        Arrays.sort(inventory);
         int modulo = (int)Math.pow(10, 9) + 7;
         long profit = 0;
         // (A + B) mod C = (A mod C + B mod C) mod C
         for (int i = inventory.length - 1; i >= 0; i--) {
             int cur = inventory[i];
-            if (K + 1 > cur) break;
+            if (K + 1 > cur) continue;
             //卖了[k+1, cur]
             profit += (long)(K + 1 + cur) * (cur - K) / 2 % modulo;
             orders -= (cur - K);
