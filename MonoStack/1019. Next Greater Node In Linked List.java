@@ -2,7 +2,7 @@ import java.util.Stack;
 
 /**
  * 时间复杂度：O(N)
- * 空间复杂度：O(1)
+ * 空间复杂度：O(N)
  * https://leetcode.com/problems/next-greater-node-in-linked-list/
  * We are given a linked list with head as the first node.  Let's number the nodes in the list: node_1, node_2, node_3, ... etc.
 
