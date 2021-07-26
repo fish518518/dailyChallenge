@@ -1,4 +1,5 @@
-/*
+/*时间复杂度：对于每个元素，都可以选择加入之前partition或者加入当前partition，所以N个元素有2^N，每个结果都要O(N)加入结果集，所以是O(N*2^N)
+空间复杂度：O（N^2），备忘录大小
 https://leetcode.com/problems/palindrome-partitioning/
 Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
 
