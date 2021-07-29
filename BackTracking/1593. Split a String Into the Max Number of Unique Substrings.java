@@ -1,4 +1,5 @@
-/**
+/**时间复杂度：对于每个元素都有两个选择， 一个是加入前面那段，一个是另起一段，所以一共是O(2^N)种组合，每种组合都要更新一下结果，所以是O(N*2^N)
+ * 空间复杂度：树的高度就是O(N)
  * https://leetcode.com/problems/split-a-string-into-the-max-number-of-unique-substrings/
  * Given a string s, return the maximum number of unique substrings that the given string can be split into.
 
@@ -34,35 +35,25 @@ s contains only lower case English letters.
 
  */
 class Solution {
-    int maxNum;
-    private void backtracking(String s, StringBuilder pre, Set<String> added, int idx, int substringsNum) {
+    private int res;
+    private void backtracking(String s, int idx, int length, Set<String> added) {
         //base
-        String preStr = pre.toString();
         if (idx == s.length()) {
-            if (pre.length() == 0) {
-                maxNum = Math.max(maxNum, substringsNum);
-            } else if (!added.contains(preStr)) {
-                maxNum = Math.max(maxNum, substringsNum + 1);
+            res = Math.max(res, length);
+        }
+        for (int i = idx + 1; i <= s.length(); i++) {
+            String subStr = s.substring(idx, i);
+            if (!added.contains(subStr)) {
+                added.add(subStr);
+                backtracking(s, i, length + 1, added);
+                added.remove(subStr);
             }
-            return;
         }
-        char c = s.charAt(idx);
-        if (pre.length() > 0 && !added.contains(preStr)) {
-            //new partition
-            added.add(preStr);
-            backtracking(s, new StringBuilder().append(c), added, idx + 1, substringsNum + 1);
-            added.remove(preStr);
-        }
-        //add to previous
-        pre.append(c);
-        backtracking(s, pre, added, idx + 1, substringsNum);
-        pre.deleteCharAt(pre.length() - 1);
     }
     public int maxUniqueSplit(String s) {
-        maxNum = 0;
-        StringBuilder pre = new StringBuilder();
+        res = 0;
         Set<String> added = new HashSet<>();
-        backtracking(s, pre, added, 0, 0);
-        return maxNum;
+        backtracking(s, 0, 0, added);
+        return res;
     }
 }
