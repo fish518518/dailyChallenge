@@ -1,5 +1,5 @@
 /**
- * 时间复杂度：O(2^N)
+ * 时间复杂度：O(N*2^N)
  * 空间复杂度：O(N)
  * https://leetcode.com/problems/subsets/
  * Given an integer array nums of unique elements, return all possible subsets (the power set).
